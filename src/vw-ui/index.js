@@ -6,6 +6,9 @@ import TabItem from './components/tabbar/tab-item';
 
 import Slider from './components/slider/slider';
 
+import Swipe from './components/swipe/swipe';
+import SwipeItem from './components/swipe/swipe-item';
+
 import Toast from './components/toast/toast.js';
 import Toptip from './components/toptip/toptip.js';
 
@@ -15,7 +18,9 @@ const COMPONENTS = [
   Button,
   Tabbar,
   TabItem,
-  Slider
+  Slider,
+  Swipe,
+  SwipeItem
 ];
 
 const SERVICES = [
@@ -38,7 +43,7 @@ if (typeof window !== 'undefined' && window.Vue) {
   install(window.Vue);
 };
 
-module.exports = {
+export default {
   install,
   version: '0.0.1'
 };

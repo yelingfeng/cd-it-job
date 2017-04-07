@@ -3,17 +3,20 @@ import VueRouter from 'vue-router';
 
 import LayoutPage from './pages/LayoutPage';
 // System
-import { NotFound } from './pages/system';
+import { NotFoundPage } from './pages/system';
 // Home
 import { HomePage } from './pages/home';
 // Search
-import { SearchDetail } from './pages/search';
+import { SearchPage, SearchDetail } from './pages/search';
 // Message
 import { MessagePage } from './pages/message';
 // My
 import { MyPage } from './pages/my';
+// Job
+import { Job, JobPreview, JobMgnt } from './pages/hr';
 // Test Page
 import TestPage from './pages/TestPage';
+import TestResumeDetail from './pages/TestResumeDetail';
 // 注册路由
 Vue.use(VueRouter);
 
@@ -24,14 +27,18 @@ const routes = [
     component: LayoutPage,
     children: [
       { path: '', component: HomePage },
-      { path: 'search', component: SearchDetail },
-    //  { path: 'search', component: SearchDetail },
+      { path: 'search', component: SearchPage },
+      { path: 'searchdetail', component: SearchDetail },
       { path: 'message', component: MessagePage },
-      { path: 'my', component: MyPage }
+      { path: 'my', component: MyPage },
+      { path: 'hr/job', component: Job },
+      { path: 'hr/job/mgnt', component: JobMgnt },
+      { path: 'hr/job/preview', component: JobPreview }
     ]
   },
   { path: '/test', component: TestPage },
-  { path: '*', component: NotFound }
+  { path: '/testresume', component: TestResumeDetail },
+  { path: '*', component: NotFoundPage }
 ];
 
 /* 注册路由 */

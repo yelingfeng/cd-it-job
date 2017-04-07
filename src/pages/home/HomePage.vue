@@ -3,6 +3,11 @@
     <vw-actionsheet :model="isFilterSearch" @handler="handlerActionSheet">
       <filterSearch ref="filter" :optionData="filterData"></filterSearch>
     </vw-actionsheet>
+    <!--我修改的部分，放置的页面有问题-->
+    <div v-if="isSearch" class="home-search-wrapper">
+      <home-search :searchValue="searchValue"></home-search>
+    </div>
+    <!---->
     <div class="job-header primary">
       <div class="job-header__search" @click="searchOnClick">
         <i class="icon ion-ios-search-strong"></i>
@@ -10,7 +15,25 @@
       </div>
     </div>
     <div class="job-content">
-      <div class="job-banner"><img src="../../assets/banner.png"></div>
+      <div class="job-banner" style="height: 5.5rem;">
+        <vw-swipe >
+          <vw-swipe-item>
+            <a href="">
+              <img src="../../assets/banner.png">
+            </a>
+          </vw-swipe-item>
+          <vw-swipe-item>
+            <a href="">
+              <img src="../../assets/2.jpg">
+            </a>
+          </vw-swipe-item>
+          <vw-swipe-item>
+            <a href="">
+              <img src="../../assets/3.jpg">
+            </a>
+          </vw-swipe-item>
+        </vw-swipe>
+      </div>
       <div class="job-list">
         <div class="job-list-item" v-for="job in jobs">
           <job-split></job-split>
@@ -20,50 +43,74 @@
     </div>
   </div>
 </template>
-<script>
+<script type="text/ecmascript-6">
+  import { mapState } from 'vuex';
   import { jobInfo, jobSplit } from 'components';
+  import HomeSearch from './HomeSearch';
   import { filterSearch } from 'components/filterSearch';
   import { ajax } from 'common';
 
   export default {
+
     components: {
       jobInfo,
       jobSplit,
-      filterSearch
+      filterSearch,
+      HomeSearch
     },
+
+    created() {
+      this.$store.dispatch('GET_JOBS');
+      ajax.get(`${window.AppConf.apiHost}/getFilterSearchData`)
+        .then(resp => {
+          this.filterData = resp.result;
+        });
+    },
+
+    computed: {
+      ...mapState({
+        jobs: state => state.job.jobs
+      })
+    },
+
     data() {
       return {
-        jobs: [],
         filterData: [],
-        isFilterSearch: false
+        isFilterSearch: false,
+        searchValue: [],
+        isSearch: false
       };
     },
+
     methods: {
       searchOnClick() {
         this.isFilterSearch = !this.isFilterSearch;
       },
       handlerActionSheet(arg) {
-        let d = this.$refs.filter.getValue();
-        console.log(d)
+        this.searchValue = this.$refs.filter.getValue();
+        console.log(this.searchValue);
         this.isFilterSearch = false;
+        this.switchIsSearch();
+        console.log(this.isSearch);
+      },
+      switchIsSearch() {
+        this.isSearch = !this.isSearch;
       }
-    },
-    created() {
-      ajax.get(`${window.AppConf.apiHost}/recommendation_list`)
-        .then(data => {
-          if (data.state === 1) {
-            this.jobs = data.data;
-          }
-        });
-
-      ajax.get(`${window.AppConf.apiHost}/getFilterSearchData`)
-        .then(resp => {
-          this.filterData = resp.result;
-        });
     }
+
   };
 </script>
 <style lang="scss" type="text/scss">
+// 修改的部分
+  .home-search-wrapper{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin-top: 40px;
+    z-index: 99;
+  }
+// 修改
 
   .invite-hot img {
     max-width: 100%;
